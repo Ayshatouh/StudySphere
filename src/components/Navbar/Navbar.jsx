@@ -108,7 +108,7 @@ const Navbar = (args) => {
     );
   
   }
-  //login
+ // login
   // //what works with some route so far
   // const login = async (credentials) => {
   //   const response = await fetch('http://localhost:34567/api/users/login', {
@@ -129,7 +129,7 @@ const Navbar = (args) => {
 
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
-  // //   try {
+  //  try {
   //     const res = await login({ email, password });
   //     const { token, role } = res;
 
@@ -143,50 +143,56 @@ const Navbar = (args) => {
   //     console.error('Login error:', err.message);
   //   }
   // };
-  // const login = async (credentials) =>{
-  //   const response = await fetch('http://localhost:34567/api/users/login', {
-  //     method: 'POST',
-  //     headers:{
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify(credentials),
-  //   });
-  //   if (!response.ok){
-  //     const errorData = await response.json();
-  //     throw new Error(errorData.message || 'Failed to login');
-  //   }
-  //   return await response.json();
-   // };
-  //  const handleSubmit = async (e)=>{
-  //   e.preventDefault();
-  //        try {
-  //   const res = await axios.post('/api/users/login', { email, password });
-  //   const { token, role } = res.data;
+  // // const login = async (credentials) =>{
+  // //   const response = await fetch('http://localhost:34567/api/users/login', {
+  // //     method: 'POST',
+  // //     headers:{
+  // //       'Content-Type': 'application/json',
+  // //     },
+  // //     body: JSON.stringify(credentials),
+  // //   });
+  // //   if (!response.ok){
+  // //     const errorData = await response.json();
+  // //     throw new Error(errorData.message || 'Failed to login');
+  // //   }
+  // //   return await response.json();
+  // //  };
+  // //  const handleSubmit = async (e)=>{
+  // //   e.preventDefault();
+  // //        try {
+  // //   const res = await axios.post('/api/users/login', { email, password });
+  // //   const { token, role } = res.data;
 
-  //   localStorage.setItem('token', token);
-  //   localStorage.setItem('role', role);
+  // //   localStorage.setItem('token', token);
+  // //   localStorage.setItem('role', role);
 
-  //   // Redirect based on role
-  //   if (role === 'admin') navigate('/dashboard');
-  //   else if (role === 'tutor') navigate('/tutor/dashboard');
-  //   else navigate('/dashboard'); // default for users
+  // //   // // Redirect based on role
+  // //   // if (role === 'admin') navigate('/dashboard');
+  // //   // else if (role === 'tutor') navigate('/tutor/dashboard');
+  // //   // else navigate('/dashboard'); // default for users
 
-  // } catch (err) {
-  //   console.log(err);
-  // }
-  //       login(formData)
-  //     .then(() => {
-  //       toast.success('Logged in!');
-  //       toggle();
-  //       navigate('/dashboard');
-  //     })
-  //     .catch(err => {
-  //       toast.error(err.message || 'Login failed');
+  // // } catch (err) {
+  // //   console.log(err);
+  // // }
+  // //       login(formData)
+  // //     .then(() => {
+  // //       toast.success('Logged in!');
+  // //       toggle();
+  // //       navigate('/dashboard');
+  // //     })
+  // //     .catch(err => {
+  // //       toast.error(err.message || 'Login failed');
 
-  //  });
+  // //  });
 
-  //  }
+  // //  }
+  
+       const handleSubmit = (e) => {
+        e.preventDefault();
 
+      navigate('/dashboard');
+    
+  };
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 React.useEffect(() => {
@@ -267,7 +273,8 @@ return (
             <button
               type="submit"
               className="w-full bg-[#9E3DAF] text-white py-2 rounded-md hover:bg-light transition"
-            >
+             
+           >
               Sign In
             </button>
 
@@ -293,7 +300,7 @@ return (
                 type="text"
                 name= "firstname"
                 onChange={handleChange}
-                value={formData.firstName}
+                value={formData.firstname}
                 className="w-full border rounded-md px-4 py-2 focus:ring-[#D98CE0]"
                 placeholder="Aisha"
               />
@@ -304,7 +311,7 @@ return (
                 type="text"
                 name="lastname"
                 onChange={handleChange}
-                value={formData.lastName}
+                value={formData.lastname}
                 className="w-full border rounded-md px-4 py-2 focus:ring-[#D98CE0]"
                 placeholder="Kabir"
               />

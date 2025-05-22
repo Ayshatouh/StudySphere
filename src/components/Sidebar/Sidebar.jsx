@@ -41,12 +41,12 @@ const Sidebar = ({role}) => {
             { to: './assignment', label: 'Assignment', icon:<FaClipboardList/>},
         ],
     };
-
+// {role} 
     const links = [...commonLinks, ...(roleLinks[role]) || []];
   return (
     <aside className="w-64 h-screen bg-[#9E3DAF] text-white p-4 fixed shadow-xl rounded-tr-3xl ronded-br-2xl">
-      <h2 className="text-xl font-bold mb-4 capitalize">{role} Panel </h2>
-      <nav className="space-y-3">
+      <h2 className="text-xl font-bold mb-4 capitalize"> StudySphere </h2>
+      <nav className="space-y-3">  
         {links.map((link) => (
           <NavLink
           key={link.to}
