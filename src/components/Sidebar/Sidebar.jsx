@@ -19,9 +19,9 @@ const Sidebar = ({role}) => {
         { to: '/dashboard', label: 'Dashboard', icon: <FaTachometerAlt/>},
         { to:'/profile', label: 'Profile', icon: <FaUser/>},
         { to: '/course', label: 'My Course', icon:<FaBook />},
-            { to: '/performance', label: 'Performance', icon:<FaChartBar />},
-            { to: '/lecture', label: 'Lecture', icon:<FaChalkboardTeacher />},
-            { to: '/quiz', label: 'Quiz', icon:<FaQuestionCircle/>},
+        { to: '/performance', label: 'Performance', icon:<FaChartBar />},
+        { to: '/lecture', label: 'Lecture', icon:<FaChalkboardTeacher />},
+        { to: '/quiz', label: 'Quiz', icon:<FaQuestionCircle/>},   
     ];
 
     const roleLinks = {

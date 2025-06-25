@@ -1,30 +1,65 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DashboardLayout from '../Layout/DashboardLayout';
 import { ToastContainer, toast } from 'react-toastify'; // Toast imports
 import 'react-toastify/dist/ReactToastify.css'; // Toast styles
-
+import axios from 'axios';
+import { data } from 'react-router-dom';
 const Profile = () => {
   const role = localStorage.getItem('role') || 'user';
   const [isEditing, setIsEditing] = useState(false); // Controls edit mode
-
+  // const storedUser = JSON.parse(localStorage.getItem('user'));
+  // const userId = storedUser?.id;
+  
   // User state holds all profile data
+    //const [user, setUser] = useState([]);
   const [user, setUser] = useState({
-    name: "Aisha Kabir Umar",
-    role: "Learner",
-    email: "aishakabir964@gmail.com",
-    address: '1037 Gama A brigade',
-    school: 'Yumsuk',
-    bio: 'ICT Graduate',
-    joined: 'February 5, 2025',
-    avatar: ''
+    name: "",
+    role: "",
+    email: "",
+    address: "",
+    school: "",
+    bio: "",
+    joined: "",
+    avatar: ""
   });
+
+  //for getting user from database
+  useEffect(()=>{
+ 
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    const token = localStorage.getItem('token');
+    // console.log('stored user:', storedUser);
+    // //console.log('response:', res.user);
+    // console.log('token:', token);
+  
+    const userId = storedUser?.id;
+
+    if(userId && token){
+      axios.get(`http://localhost:34567/api/users/${userId}`, {
+        headers:{
+          Authorization:`Bearer ${token}`
+        }
+      }) 
+         
+        .then(res => {
+          console.log('response', res);
+          setUser(res.data.user[0]);
+        })
+
+        .catch(err =>{
+          console.error('failed to fetch user data:', err);
+          toast.error("Failed to load profile info");
+        });
+    }
+  }, []);
+  
 
   // Handles profile image change
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file); // Creates a preview
-      setUser((prevUser) => ({ ...prevUser, avatar: imageUrl }));
+      setUser((prevUser) => ({ ...prevUser, avatar:imageUrl}));
     }
   };
 
@@ -34,19 +69,27 @@ const Profile = () => {
   };
 
   // Submits the profile update
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setIsEditing(false);
+      try{
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+        const userId = storedUser?.id;
 
-    // Show toast message
-    toast.success("Profile updated successfully!", {
-      position: toast.POSITION.TOP_RIGHT,
-    });
+        if (userId){
+          await axios.put(`http://localhost:34567/api/users/${userId}`, user);
+          toast.success("Profile updated successfully");
+        }
+      } catch(error){
+        console.error('Error updating profile:', error);
+        toast.error('failed to update profile');
+      }
+   
 
-    // Optional: Send data to backend here
   };
 
   return (
     <DashboardLayout role={role}>
+    {/* {JSON.stringify(user)} */}
       <div className='p-6 min-h-screen'>
 
         {/* Toast container (required for showing toasts) */}
@@ -63,7 +106,7 @@ const Profile = () => {
                 {/* Edit Mode: Upload Image */}
                 {isEditing ? (
                   <>
-                    <label htmlFor='avatar-upload'>
+                    <label htmlFor='avatar'>
                       <div className='w-24 h-24 rounded-full bg-[#D98CE0] flex items-center justify-center cursor-pointer hover:bg-gray-300'>
                         {user.avatar ? (
                           <img
@@ -77,7 +120,7 @@ const Profile = () => {
                       </div>
                     </label>
                     <input
-                      id='avatar-upload'
+                      id='avatar'
                       type='file'
                       accept='image/*'
                       onChange={handleImageChange}
@@ -119,13 +162,13 @@ const Profile = () => {
                   <input
                     type='text'
                     name='name'
-                    value={user.name}
+                    value={user.firstname}
                     onChange={handleChange}
                     className='text-xl font-bold bg-white text-black px-2 py-1 rounded'
                   />
                 ) : (
                   <>
-                    <h2 className='text-2xl font-bold'>{user.name}</h2>
+                    <h2 className='text-2xl font-bold'>{user.firstname}</h2>
                     <p>{user.role}</p>
                     <p className='text-sm'>Member since: {user.joined}</p>
                   </>
@@ -157,11 +200,11 @@ const Profile = () => {
                 <>
                   <input
                     type="text"
-                    name="company"
-                    value={user.company || ''}
+                    name="school"
+                    value={user.school || ''}
                     onChange={handleChange}
                     className="block w-full border rounded px-2 py-1 mb-2"
-                    placeholder="Company"
+                    placeholder="School"
                   />
                   <input
                     type="text"
@@ -182,7 +225,7 @@ const Profile = () => {
                 </>
               ) : (
                 <>
-                  <p><strong>School:</strong> {user.school || 'N/A'}</p>
+                  <p><strong>School:</strong> {user.school}</p>
                   <p><strong>Address:</strong> {user.address}</p>
                   <p><strong>Email:</strong> {user.email}</p>
                 </>

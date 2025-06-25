@@ -108,91 +108,45 @@ const Navbar = (args) => {
     );
   
   }
- // login
-  // //what works with some route so far
-  // const login = async (credentials) => {
-  //   const response = await fetch('http://localhost:34567/api/users/login', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify(credentials),
-  //   });
+ 
+ const handleSubmit = (e) => {
+    e.preventDefault();
 
-  //   if (!response.ok) {
-  //     const errorData = await response.json();
-  //     throw new Error(errorData.message || 'Failed to login');
-  //   }
+    fetch('http://localhost:34567/api/users/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData)
+    })
+    .then(async (res) => {
+      const text = await res.text();
+      try {
+        const data = JSON.parse(text);
+        if (res.ok && data.success) {
+          toast.success('Login successful!');
+          
+          // Save token and user in localStorage or context
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('user', JSON.stringify(data.user));
 
-  //   return await response.json();
-  // };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //  try {
-  //     const res = await login({ email, password });
-  //     const { token, role } = res;
-
-  //     localStorage.setItem('token', token);
-  //     localStorage.setItem('role', role);
-
-  //     if (role === 'admin') navigate('/dashboard');
-  //     else if (role === 'tutor') navigate('/tutor/dashboard');
-  //     else navigate('/dashboard');
-  //   } catch (err) {
-  //     console.error('Login error:', err.message);
-  //   }
-  // };
-  // // const login = async (credentials) =>{
-  // //   const response = await fetch('http://localhost:34567/api/users/login', {
-  // //     method: 'POST',
-  // //     headers:{
-  // //       'Content-Type': 'application/json',
-  // //     },
-  // //     body: JSON.stringify(credentials),
-  // //   });
-  // //   if (!response.ok){
-  // //     const errorData = await response.json();
-  // //     throw new Error(errorData.message || 'Failed to login');
-  // //   }
-  // //   return await response.json();
-  // //  };
-  // //  const handleSubmit = async (e)=>{
-  // //   e.preventDefault();
-  // //        try {
-  // //   const res = await axios.post('/api/users/login', { email, password });
-  // //   const { token, role } = res.data;
-
-  // //   localStorage.setItem('token', token);
-  // //   localStorage.setItem('role', role);
-
-  // //   // // Redirect based on role
-  // //   // if (role === 'admin') navigate('/dashboard');
-  // //   // else if (role === 'tutor') navigate('/tutor/dashboard');
-  // //   // else navigate('/dashboard'); // default for users
-
-  // // } catch (err) {
-  // //   console.log(err);
-  // // }
-  // //       login(formData)
-  // //     .then(() => {
-  // //       toast.success('Logged in!');
-  // //       toggle();
-  // //       navigate('/dashboard');
-  // //     })
-  // //     .catch(err => {
-  // //       toast.error(err.message || 'Login failed');
-
-  // //  });
-
-  // //  }
-  
-       const handleSubmit = (e) => {
-        e.preventDefault();
-
-      navigate('/dashboard');
-    
+          navigate('/dashboard');
+        } else {
+          // Show error messages (email or password)
+          toast.error(data.email || data.password || 'Login failed');
+        }
+      } catch (err) {
+        console.error('Invalid JSON:', text);
+        toast.error('Server error');
+      }
+    })
+    .catch((err) => {
+      console.error('Request failed:', err);
+      toast.error('Network error');
+    });
   };
+
+  
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 React.useEffect(() => {
