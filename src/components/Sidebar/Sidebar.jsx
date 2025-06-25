@@ -13,15 +13,15 @@ import {
   } from 'react-icons/fa';
 
 const Sidebar = ({role}) => {
-  
+   console.log('Current role:', role); 
     const commonLinks = [
 
         { to: '/dashboard', label: 'Dashboard', icon: <FaTachometerAlt/>},
         { to:'/profile', label: 'Profile', icon: <FaUser/>},
-        { to: '/course', label: 'My Course', icon:<FaBook />},
-        { to: '/performance', label: 'Performance', icon:<FaChartBar />},
-        { to: '/lecture', label: 'Lecture', icon:<FaChalkboardTeacher />},
-        { to: '/quiz', label: 'Quiz', icon:<FaQuestionCircle/>},   
+        // { to: '/course', label: 'My Course', icon:<FaBook />},
+        // { to: '/performance', label: 'Performance', icon:<FaChartBar />},
+        // { to: '/lecture', label: 'Lecture', icon:<FaChalkboardTeacher />},
+        // { to: '/quiz', label: 'Quiz', icon:<FaQuestionCircle/>},   
     ];
 
     const roleLinks = {
@@ -33,8 +33,8 @@ const Sidebar = ({role}) => {
 
         ],
         admin: [
-            { to: '/manage-users', label: 'Manage Users', icon:<FaUser />},
-            { to: './report', label: 'Reports', icon:<FaFileAlt />},
+            { to: '/manageuser', label: 'Manage Users', icon:<FaUser />},
+            { to: '/report', label: 'Reports', icon:<FaFileAlt />},
         ],
         tutor: [
             { to: '/my-class', label: 'My Class', icon:<FaChalkboardTeacher/>},
