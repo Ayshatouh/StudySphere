@@ -1,5 +1,6 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext';
 import {
     FaTachometerAlt,
     FaUser,
@@ -12,16 +13,29 @@ import {
     FaClipboardList,
   } from 'react-icons/fa';
 
-const Sidebar = ({role}) => {
-   console.log('Current role:', role); 
+const Sidebar = () => {
+
+     const {user, handleLogout} = useAuth();
+     const navigate = useNavigate();
+     const onLogoutClick =()=>{
+      handleLogout();
+      navigate('/');
+     };
+     const role = user?.role || 'user';
     const commonLinks = [
 
-        { to: '/dashboard', label: 'Dashboard', icon: <FaTachometerAlt/>},
+        { to: 
+           role === 'admin'
+           ? '/admin/dashboard'
+           : role === 'tutor'
+           ? '/tutor/dashboard'
+           :'/dashboard',
+          label: 'Dashboard',
+          icon: <FaTachometerAlt/>,
+        },
+
         { to:'/profile', label: 'Profile', icon: <FaUser/>},
-        // { to: '/course', label: 'My Course', icon:<FaBook />},
-        // { to: '/performance', label: 'Performance', icon:<FaChartBar />},
-        // { to: '/lecture', label: 'Lecture', icon:<FaChalkboardTeacher />},
-        // { to: '/quiz', label: 'Quiz', icon:<FaQuestionCircle/>},   
+
     ];
 
     const roleLinks = {
@@ -32,9 +46,10 @@ const Sidebar = ({role}) => {
             { to: '/quiz', label: 'Quiz', icon:<FaQuestionCircle/>},
 
         ],
+
         admin: [
-            { to: '/manageuser', label: 'Manage Users', icon:<FaUser />},
-            { to: '/report', label: 'Reports', icon:<FaFileAlt />},
+            { to: '/admin/manageuser', label: 'Manage Users', icon:<FaUser />},
+            { to: '/admin/reports', label: 'Reports', icon:<FaFileAlt />},
         ],
         tutor: [
             { to: '/my-class', label: 'My Class', icon:<FaChalkboardTeacher/>},
@@ -44,9 +59,9 @@ const Sidebar = ({role}) => {
 // {role} 
     const links = [...commonLinks, ...(roleLinks[role]) || []];
   return (
-    <aside className="w-64 h-screen bg-[#9E3DAF] text-white p-4 fixed shadow-xl rounded-tr-3xl ronded-br-2xl">
+    <aside className="w-64 h-screen flex flex-col bg-[#9E3DAF] text-white p-4 fixed shadow-xl rounded-tr-3xl rounded-br-2xl">
       <h2 className="text-xl font-bold mb-4 capitalize"> StudySphere </h2>
-      <nav className="space-y-3">  
+      <nav className="flex-1 space-y-3 overflow-auto">  
         {links.map((link) => (
           <NavLink
           key={link.to}
@@ -64,6 +79,11 @@ const Sidebar = ({role}) => {
         </NavLink>
         ))}
       </nav>
+        <button
+          onClick={onLogoutClick}
+          className='mt-4 w-full bg-[#D98CE0] text-white py-2 rounded-md'>
+          Logout
+        </button>
     </aside>
   );
 };

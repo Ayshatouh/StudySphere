@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
 import { IoMdMenu } from "react-icons/io";
 import { motion } from "framer-motion";
@@ -41,7 +42,6 @@ const Navbar = (args) => {
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -49,7 +49,7 @@ const Navbar = (args) => {
   const [formType, setFormType] = useState ("login")
   // const [showLogin, setShowLogin] = useState(false);
   // const [showRegister, setShowRegister] = useState(false);
-  
+  const {setUser, setToken} = useAuth();
   const [formData, setFormData] = useState ({
     firstname:"",
     lastname:"",
@@ -130,7 +130,21 @@ const Navbar = (args) => {
           localStorage.setItem('token', data.token);
           localStorage.setItem('user', JSON.stringify(data.user));
 
-          navigate('/dashboard');
+          setToken(data.token);
+          setUser(data.user);
+//conditional logged in
+          switch (data.user.role){
+            case 'admin':
+              navigate('/admin/dashboard');
+              break;
+            case 'tutor':
+              navigate('/tutor/dashboard');
+              break;
+            default:
+              navigate('/dashboard');
+            break;
+          }
+         // navigate('/dashboard');
         } else {
           // Show error messages (email or password)
           toast.error(data.email || data.password || 'Login failed');
